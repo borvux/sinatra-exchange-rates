@@ -3,28 +3,43 @@ require "sinatra/reloader"
 require "http"
 require "json"
 
-# build the API url, including the API key in the query string
-api_url = "http://api.exchangerate.host/list?access_key=#{ENV["EXCHANGERATES_KEY"]}"
-
-# use HTTP.get to retrieve the API information
-raw_data = HTTP.get(api_url)
-
-# convert the raw request to a string
-raw_data_string = raw_data.to_s
-
-# convert the string to JSON
-parsed_data = JSON.parse(raw_data_string)
-
 get("/") do
+
+  # build the API url, including the API key in the query string
+  api_url = "http://api.exchangerate.host/list?access_key=#{ENV["EXCHANGERATES_KEY"]}"
+
+  # use HTTP.get to retrieve the API information
+  raw_data = HTTP.get(api_url)
+
+  # convert the raw request to a string
+  raw_data_string = raw_data.to_s
+
+  # convert the string to JSON
+  parsed_data = JSON.parse(raw_data_string)
+
   #get the currencies from the JSON
-  @currencies_data = parsed_data.fetch("currencies")
+  @symbols = parsed_data.fetch("currencies").keys
 
   erb(:homepage)
 end
 
 get("/:from_currency") do
-  @currencies_data = parsed_data.fetch("currencies")
-  @original_currency = params.fetch("from_currency").to_s
+  @original_currency = params.fetch("from_currency")
+
+  # build the API url, including the API key in the query string
+  api_url = "http://api.exchangerate.host/list?access_key=#{ENV["EXCHANGERATES_KEY"]}"
+
+  # use HTTP.get to retrieve the API information
+  raw_data = HTTP.get(api_url)
+
+  # convert the raw request to a string
+  raw_data_string = raw_data.to_s
+
+  # convert the string to JSON
+  parsed_data = JSON.parse(raw_data_string)
+
+  #get the currencies from the JSON
+  @symbols = parsed_data.fetch("currencies").keys
 
   erb(:from_currency)
 end

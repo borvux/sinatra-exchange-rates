@@ -1,9 +1,9 @@
- <h1>Convert <%= @original_currency.to_s %></h1>
+ <h1>Convert <%= @original_currency %></h1>
 
 <p>Go <a href="/">back</a>.</p>
 
 <ul>
-  <% @currencies_data.each do |key, value| %>
+  <% @symbols.each do |key, value| %>
   <li>
     <a href="/<%= @original_currency%>/<%= key %>">Convert 1 <%= @original_currency %> to <%= key %>...</a>
   </li>
